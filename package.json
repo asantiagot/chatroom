@@ -1,0 +1,26 @@
+{
+  "name": "chatroom",
+  "version": "1.0.0",
+  "description": "Finances Chatroom",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asantiagot/chatroom.git"
+  },
+  "author": "Jose Antonio Santiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asantiagot/chatroom/issues"
+  },
+  "homepage": "https://github.com/asantiagot/chatroom#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
