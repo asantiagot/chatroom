@@ -19,10 +19,14 @@ socket.on('chat', data => {
 });
 
 socket.on('loadDbMessages', messages => {
-    console.log(`messages length: ${messages.length}`);
-    // console.log(`Keys: ${Object.keys(messages)}`);
+    let locale = navigator.language;
+    let humanDate;
     for(msg in messages) {
-        messageOutput.innerHTML += `<p><strong> ${messages[msg].username}</strong>: ${messages[msg].message}</p>`
+        humanDate = new Date(messages[msg].date).toLocaleString(locale);
+        messageOutput.innerHTML += `<p><strong> ${messages[msg].username}</strong> (${humanDate}): ${messages[msg].message}</p>`;
     };
-    // messageOutput.innerHTML = `<p>Hey!!! hardcoded from server</p>`;
 })
+
+if (messageOutput.children.length > 1) {
+    messageOutput.removeChild(messageOutput.childNodes[0]);
+}
