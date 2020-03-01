@@ -6,8 +6,8 @@ const server = app.listen(app.get('port'), () => {
 });
 
 const io = socket(server);
-const dbOperations = require('../db/dbOperations');
+const dbOperations = require('../db/userDbOperations');
 require('./sockets')(io);
 
 // addUser
-dbOperations.addUser('asantiagot11', 'welcomezzzz');
+dbOperations.addUser('asantiagot15', 'welcomezzzz');

@@ -24,7 +24,7 @@ userSchema.pre('save', function (next) {
             user.password = hash;
             next();
         });
-    });    
+    });
 });
 
 userSchema.methods.comparePassword = function (pass, callback) {
