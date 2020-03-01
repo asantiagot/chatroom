@@ -2,9 +2,10 @@
   "name": "chatroom",
   "version": "1.0.0",
   "description": "Finances Chatroom",
-  "main": "index.js",
+  "main": "src/server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/asantiagot/chatroom#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
+    "mongoose": "^5.9.2",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
