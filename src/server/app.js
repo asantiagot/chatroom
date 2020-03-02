@@ -5,8 +5,10 @@ const session = require('express-session');
 const mongoose = require('mongoose')
 const dburl = require('../db/constants');
 const mongoSessionStore = require('connect-mongo');
+const bodyParser = require('body-parser');
 const mongoStore = mongoSessionStore(session);
 const public = path.join(__dirname, '../', 'public');
+const routes = require('./router');
 
 app.use(express.static(public));
 
@@ -46,10 +48,18 @@ const sessionObject = {
 
 app.use(session(sessionObject));
 
-app.get('/', (request, response, next) => {
-    // console.log(`public: ${public}`);
-    // console.log(`attempted redirect: /src/public/index.html`);
-    // response.redirect('src/public/index.html');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/', routes);
+app.use((req, res, next) => {
+    const err = new Error(`Resource not found`);
+    err.status = 404;
+    next(err);
+});
+
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.send(err.message);
 });
 
 app.get('/src/public/index.html', (request, response) => {
