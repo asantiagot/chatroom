@@ -1,5 +1,5 @@
 # FINANCES CHATROOM
-
+![](Chatroom.png)
 ## Description
 Browser-based chatroom built with Node.js. It implements Socket.io as broker, and allows users to chat and request the stock price of a given financial entity. This is done with a decoupled bot that parses the received CSV and returns a message into the chatroom.
 
