@@ -7,8 +7,7 @@ function requestStock (stockCode) {
         secure: process.env.SERVER_PROTOCOL === 'https',
         reconnection: true,
         rejectUnauthorized: false,
-        port: 5000,
-        // agent: 'stockbot'
+        port: 5000
     });
 
     const stockService = `https://stooq.com/q/l/?s=${stockCode}&f=sd2t2ohlcv&h&e=csv`;
@@ -24,7 +23,7 @@ function requestStock (stockCode) {
                 } else {
                     const stockMessage = `${val[0]} quote is $${val[6]} per share`;         // TODO: if there's time, implement this parsing differently
                     console.log(stockMessage);
-                    socket.emit('chat', {username: 'stockbot', date: Date.now(), message: stockMessage});
+                    socket.emit('botmessage', {username: 'stockbot', date: Date.now(), message: stockMessage});
                 }
 
             } else {

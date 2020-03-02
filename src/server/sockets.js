@@ -11,7 +11,7 @@ module.exports = io => {
                 let entity = message.slice(stock.length).trim();
                 bot(entity);
             } else {
-                let saveOperation = await messageDbOperations.saveMessage({
+                await messageDbOperations.saveMessage({
                     username: 'asantiagot',
                     message: message,
                     date: Date.now()
@@ -21,10 +21,17 @@ module.exports = io => {
             }
         });
 
-        let messages = await messageDbOperations.getMessages();
+        socket.on('botmessage', async (data) => {
+            io.sockets.emit('chat', data);
+        });
 
-        if (messages.length > 0) {
-            io.sockets.emit('loadDbMessages', messages);
-        }
+        socket.on('first login', async () => {
+            let messages = await messageDbOperations.getMessages();
+
+            if (messages.length > 0) {
+                io.sockets.emit('loadDbMessages', messages);
+            }
+        })
+
     });
 }

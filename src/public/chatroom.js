@@ -17,6 +17,8 @@ sendMessage.addEventListener('click', () => {
     } 
 });
 
+socket.emit('first login');
+
 socket.on('chat', data => {
     let humanDate = new Date(data.date).toLocaleString(locale);
     let color = data.username === 'stockbot' ? 'green' : 'black';
