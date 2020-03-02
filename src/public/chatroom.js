@@ -11,14 +11,17 @@ sendMessage.addEventListener('click', () => {
         socket.emit('chat', {
             message: messageInput.value,
             username: socket.id, // username.value
-            date: Date.now
+            date: Date.now()
         });
         messageInput.value = "";
     } 
 });
 
 socket.on('chat', data => {
-    messageOutput.innerHTML += `<p><strong> ${data.username}</strong>: ${data.message}</p>`
+    let humanDate = new Date(data.date).toLocaleString(locale);
+    let color = data.username === 'stockbot' ? 'green' : 'black';
+    console.log(`color: ${color}`);
+    messageOutput.innerHTML += `<p><font color="${color}"><strong>${data.username}</strong></font> (${humanDate}): ${data.message}</p>`;
 });
 
 socket.on('loadDbMessages', messages => {
@@ -27,8 +30,8 @@ socket.on('loadDbMessages', messages => {
         humanDate = new Date(messages[msg].date).toLocaleString(locale);
         messageOutput.innerHTML += `<p><strong> ${messages[msg].username}</strong> (${humanDate}): ${messages[msg].message}</p>`;
     };
-})
+});
 
-if (messageOutput.children.length > 1) {
+if (messageOutput.children.length > 100) {
     messageOutput.removeChild(messageOutput.childNodes[0]);
 }

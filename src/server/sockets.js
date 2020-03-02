@@ -9,16 +9,22 @@ module.exports = io => {
             let isStockCommand = message.substr(0, stock.length) === stock ? true : false;
             if (isStockCommand) {
                 let entity = message.slice(stock.length).trim();
-                console.log(`bot message. entity: ${entity}`);
                 bot(entity);
             } else {
+                let saveOperation = await messageDbOperations.saveMessage({
+                    username: 'asantiagot',
+                    message: message,
+                    date: Date.now()
+                });
+                
                 io.sockets.emit('chat', data);
             }
         });
-        // let messages = await messageDbOperations.getMessages();
 
-        // if (messages.length > 0) {
-        //     io.sockets.emit('loadDbMessages', messages);
-        // }
+        let messages = await messageDbOperations.getMessages();
+
+        if (messages.length > 0) {
+            io.sockets.emit('loadDbMessages', messages);
+        }
     });
 }
