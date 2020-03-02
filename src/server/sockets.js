@@ -12,7 +12,7 @@ module.exports = io => {
                 bot(entity);
             } else {
                 await messageDbOperations.saveMessage({
-                    username: 'asantiagot',
+                    username: socket.id, //'asantiagot',
                     message: message,
                     date: Date.now()
                 });

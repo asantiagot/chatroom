@@ -46,7 +46,7 @@ const sessionObject = {
 
 app.use(session(sessionObject));
 
-app.get('/', (request, response) => {
+app.get('/', (request, response, next) => {
     // console.log(`public: ${public}`);
     // console.log(`attempted redirect: /src/public/index.html`);
     // response.redirect('src/public/index.html');
