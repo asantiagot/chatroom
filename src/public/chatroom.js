@@ -4,11 +4,14 @@ let messageOutput = document.getElementById('messageOutput');
 let messageInput = document.getElementById('messageInput');
 let sendMessage = document.getElementById('sendMessage');
 
+let locale = navigator.language;
+
 sendMessage.addEventListener('click', () => {
     if (messageInput.value !== "") {
         socket.emit('chat', {
             message: messageInput.value,
-            username: socket.id // username.value
+            username: socket.id, // username.value
+            date: Date.now
         });
         messageInput.value = "";
     } 
@@ -19,7 +22,6 @@ socket.on('chat', data => {
 });
 
 socket.on('loadDbMessages', messages => {
-    let locale = navigator.language;
     let humanDate;
     for(msg in messages) {
         humanDate = new Date(messages[msg].date).toLocaleString(locale);

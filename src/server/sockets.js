@@ -10,16 +10,15 @@ module.exports = io => {
             if (isStockCommand) {
                 let entity = message.slice(stock.length).trim();
                 console.log(`bot message. entity: ${entity}`);
-                await bot(entity);
-                // console.log(stockResponse);
+                bot(entity);
+            } else {
+                io.sockets.emit('chat', data);
             }
-            io.sockets.emit('chat', data);
         });
+        // let messages = await messageDbOperations.getMessages();
 
-        let messages = await messageDbOperations.getMessages();
-
-        if (messages.length > 0) {
-            io.sockets.emit('loadDbMessages', messages);
-        }
+        // if (messages.length > 0) {
+        //     io.sockets.emit('loadDbMessages', messages);
+        // }
     });
 }
