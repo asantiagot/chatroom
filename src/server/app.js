@@ -7,10 +7,10 @@ const dburl = require('../db/constants');
 const mongoSessionStore = require('connect-mongo');
 const bodyParser = require('body-parser');
 const mongoStore = mongoSessionStore(session);
-const public = path.join(__dirname, '../', 'public');
+// const public = path.join(__dirname, '../', 'public');
 const routes = require('./router');
 
-app.use(express.static(public));
+// app.use(express.static(public));
 
 const ONE_DAY_MILI = 1 * 24 * 60 * 60 * 1000;
 const ONE_DAY_SECS = 1 * 24 * 60 * 60;
@@ -48,8 +48,8 @@ const sessionObject = {
 
 app.use(session(sessionObject));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', routes);
 app.use((req, res, next) => {
     const err = new Error(`Resource not found`);

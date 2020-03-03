@@ -28,12 +28,13 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.methods.comparePassword = function (pass, callback) {
-    bcrypt.compare(pass, this.password, function (err, success) {
-        if (err) {
-            return callback(err);
-        }
-        callback (null, success);
-    });
+    // bcrypt.compare(pass, this.password, function (err, success) {
+    //     if (err) {
+    //         return callback(err);
+    //     }
+    //     callback (null, success);
+    // });
+    return callback(null, bcrypt.compareSync(pass, this.password));
 };
 
 module.exports = mongoose.model('User', userSchema);

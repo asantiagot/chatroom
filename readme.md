@@ -28,6 +28,7 @@ show collections
 
 3. Add a couple of messages to load into the chatroom
 ```
+use financeChatroom
 db.messages.insert({username: 'pirateking', message: 'hello friends, this is the first message', date: new Date()});
 db.messages.insert({username: 'harrypotter', message: 'how are you?', date: new Date()});
 db.messages.insert({username: 'wolf', message: 'stock market is crazy', date: new Date()});

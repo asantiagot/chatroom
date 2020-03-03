@@ -1,31 +1,114 @@
 const express = require('express');
 const router = express.Router();
+const userModel = require('../db/userModel');
+const connect = require('../db/connect');
 const userDbOperations = require('../db/userDbOperations');
 const path = require('path');
-// const app = express();
 
-router.get('/', (req, res, next) => {
-    const public = path.join(__dirname, '../', 'public');
-    // console.log(`public: ${public}`);
-    // res.sendFile(path.join(public, 'index.html'));
-    // return res.sendFile(path.join(public, 'chatroom.js'));
-    // app.use(express.static(public));
+const redirectLogin = (req, res, next) => {
+    if (!req.session.userSessionId) {
+        res.redirect(`/login`);
+    } else {
+        next();
+    }
+}
+
+const redirectChat = (req, res, next) => {
+    if (req.session.userSessionId) {
+        res.redirect(`/chat`);
+    } else {
+        next();
+    }
+}
+
+router.get('/', (req, res) => {
+    const username = req.username;
+    res.send(`
+        <h1>Welcome to Finance Chatroom. Please login to access</h1>
+        <a href='/login'>Login</a>
+        <a href='/register'>Register</a>
+        <form method='post' action='/logout'>Logout</form>
+    `);    
 });
 
-router.post('/', (req, res, next) => {
-    let pass = req.body.password.trim();
-    let user = req.body.username.trim();
-
-    if (pass === '') {
-        const msg = 'Password cannot be empty';
-        let err = new Error(msg);
-        err.status = 400;
-        res.send(msg);
+router.get('/chat', redirectLogin, (req, res) => {
+    let options = {
+        root: path.join(__dirname, '../', 'public'),
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
     }
 
-    if (req.body.username && req.body.password) {
-        userDbOperations.addUser(user, pass);
-    }
+    res.sendFile('/', options, (err, next) => {
+        if (err) {
+            next(err);
+        }
+    });
+});
+
+router.get('/login', redirectChat, (req, res) => {
+    res.send(`
+        <h1>Login</h1>
+        <form method='POST' action='/login'>
+            <input type='username' name='username' placeholder='username' required/>
+            <input type='password' name='password' placeholder='password' required/>
+            <input type='submit'/>
+        </form>
+        <a href='/register'>Register</a>
+        <a href='/'>Home</a>
+    `);
+});
+
+router.post('/login', redirectChat, (req, res) => {
+    const {username, password} = req.body;
+    connect()
+        .then(async() => {
+            console.log('connected to the db from router login');
+            let user = await userModel.findOne({username: username}).exec();
+            if (!user) { 
+                console.log('user not found');
+                res.redirect('/login');
+            } else {
+                user.comparePassword(password, (err, isMatch) => {
+                    if (err) throw err;
+                    if (isMatch) {
+                        req.header.username = username;
+                        req.session.userSessionId = username;
+                        res.redirect('/chat');
+                    } else {
+                        res.redirect('/login')
+                    }
+                });
+            }
+        })
+        .catch(err => {
+            throw (`Error establishing connection to DB: ${err}`);
+        });
+});
+
+router.get('/register', redirectChat, (req, res) => {
+    res.send(`
+        <h1>Register</h1>
+        <form method='POST' action='/register'>
+            <input type='username' name='username' placeholder='username' required/>
+            <input type='password' name='password' placeholder='password' required/>
+            <input type='submit'/>
+        </form>
+        <a href='/login'>Login</a>
+        <a href='/'>Home</a>
+    `);
+});
+
+router.post('/register', redirectChat, (req, res) => {
+    const {username, password} = req.body;
+    userDbOperations.addUser(username, password);
+    res.redirect('/login');
+});
+
+router.post('/logout', redirectLogin, (req, res) => {
+    // TODO
 });
 
 module.exports = router;

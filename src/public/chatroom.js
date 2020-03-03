@@ -1,3 +1,5 @@
+import { request } from "express";
+
 const socket = io.connect('http://localhost:5000');
 
 let messageOutput = document.getElementById('messageOutput');
@@ -10,7 +12,7 @@ sendMessage.addEventListener('click', () => {
     if (messageInput.value !== "") {
         socket.emit('chat', {
             message: messageInput.value,
-            username: socket.id, // username.value
+            username: request.session.userSessionId, //socket.id,
             date: Date.now()
         });
         messageInput.value = "";
